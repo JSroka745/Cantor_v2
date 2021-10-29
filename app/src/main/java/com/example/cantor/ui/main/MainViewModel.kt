@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
     // TODO: Implement the ViewModel
     lateinit  var listData : MutableLiveData<Data>
     private lateinit var wholeDataList: MutableList<Data>
-    private lateinit var listitems:MutableList<ListItem>
+    lateinit var listitems:MutableList<ListItem>
    // private lateinit var questionList: MutableList<Result>
 
 
@@ -34,6 +34,8 @@ class MainViewModel : ViewModel() {
         data.value=listitems
         return data
     }
+
+
 
     fun makeAPICall(input:String){
         val retroInstance= RetroInstance.getRetroInstance().create(RetroService::class.java)

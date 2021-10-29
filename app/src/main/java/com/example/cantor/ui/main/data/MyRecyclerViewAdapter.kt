@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-class Adapter( private var dataList: List<ListItem>, val itemClickHandler: (ListItem) -> Unit) : RecyclerView.Adapter<Adapter.Viewholder>() {
+
+class MyRecyclerViewAdapter( private var dataList: List<ListItem>) : RecyclerView.Adapter<MyRecyclerViewAdapter.Viewholder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Viewholder {
@@ -34,13 +35,13 @@ class Adapter( private var dataList: List<ListItem>, val itemClickHandler: (List
         {
             var headeritem: ListItem.HeaderItem= dataList.get(position) as ListItem.HeaderItem
             holder.tv_date.text=headeritem.header_title
-            holder.itemView.setOnClickListener { itemClickHandler(headeritem) }
+            //holder.itemView.setOnClickListener { itemClickHandler(headeritem) }
         }
         else{
             var rateitem: ListItem.RatesItem= dataList.get(position) as ListItem.RatesItem
             holder.tv_name.text=rateitem.name
             holder.tv_value.text= rateitem.value.toString()
-            holder.itemView.setOnClickListener { itemClickHandler(rateitem) }
+            //holder.itemView.setOnClickListener { itemClickHandler(rateitem) }
         }
             }
 

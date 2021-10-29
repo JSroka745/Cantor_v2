@@ -11,11 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cantor.R
 import com.example.cantor.databinding.MainFragmentBinding
+import com.example.cantor.ui.main.data.MyRecyclerViewAdapter
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var myadapter: MyRecyclerViewAdapter
     companion object {
         fun newInstance() = MainFragment()
     }
@@ -43,6 +45,9 @@ class MainFragment : Fragment() {
         recyclerView=binding.mainfragmentRecyclerView
         viewModel.getListItems().observe(viewLifecycleOwner, Observer {
 //skonczyles tutajjj
+            myadapter= MyRecyclerViewAdapter(viewModel.listitems)
+            recyclerView!!.adapter=myadapter
+
         })
 
         return inflater.inflate(R.layout.main_fragment, container, false)
