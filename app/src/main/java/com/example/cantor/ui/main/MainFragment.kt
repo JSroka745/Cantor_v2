@@ -42,7 +42,7 @@ class MainFragment : Fragment() {
 
         recyclerView=binding.mainfragmentRecyclerView
         viewModel.getListItems().observe(viewLifecycleOwner, Observer {
-            
+
         })
 
         return inflater.inflate(R.layout.main_fragment, container, false)
