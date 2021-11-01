@@ -2,16 +2,22 @@ package com.example.cantor.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cantor.R
 import com.example.cantor.databinding.MainFragmentBinding
 import com.example.cantor.ui.main.data.MyRecyclerViewAdapter
+import android.widget.Toast
+
+
+
 
 class MainFragment : Fragment() {
 
@@ -29,28 +35,38 @@ class MainFragment : Fragment() {
 
 
 
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.main_fragment,
-            container,
-            false
-        )
+        binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding.viewModel = viewModel
 
 
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.makeAPICall("http://data.fixer.io/api/2021-10-29?access_key=d7883a55be191f4c15ba6f1dd5fc7a83&symbols=USD,JPY,GBP,AUD,CAD,PLN,MXN,RUB")
+       // "http://data.fixer.io/api/2021-10-29?access_key=d7883a55be191f4c15ba6f1dd5fc7a83&symbols=USD,JPY,GBP,AUD,CAD,PLN,MXN,RUB"
 
+        viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
         recyclerView=binding.mainfragmentRecyclerView
-        viewModel.getListItems().observe(viewLifecycleOwner, Observer {
-//skonczyles tutajjj
-            myadapter= MyRecyclerViewAdapter(viewModel.listitems)
-            recyclerView!!.adapter=myadapter
 
+
+        viewModel.listData.observe(viewLifecycleOwner, Observer {
+            myadapter= MyRecyclerViewAdapter(it)
+            recyclerView!!.adapter=myadapter
+            recyclerView!!.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
+
+            myadapter.notifyDataSetChanged()
         })
 
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toast.makeText(context, "Last", Toast.LENGTH_LONG).show()
+                    viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
+
+                }
+            }
+        })
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
