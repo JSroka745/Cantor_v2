@@ -13,7 +13,7 @@ import java.util.*
 class MainViewModel : ViewModel() {
     var listData : MutableLiveData<MutableList<ListItem>> = MutableLiveData()
 
-    val accesskey="780c7f66d5aec984c54a81e863831b32"
+    val accesskey="4e04d254c8040cd346d6fa8bd1ec0b79"
     val symbols="USD,JPY,GBP,AUD,CAD,PLN,MXN,RUB"
     var date_for_download: Calendar =Calendar.getInstance()
 
