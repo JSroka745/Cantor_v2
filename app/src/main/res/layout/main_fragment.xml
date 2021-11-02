@@ -19,7 +19,7 @@
             android:id="@+id/mainfragment_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#76FF03"
+            android:background="@color/my_primary"
             tools:listitem="@layout/header_view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

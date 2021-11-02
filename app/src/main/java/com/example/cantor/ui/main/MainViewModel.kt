@@ -2,6 +2,7 @@ package com.example.cantor.ui.main
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.cantor.ui.main.data.Data
@@ -15,19 +16,21 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 class MainViewModel : ViewModel() {
     // TODO: Implement the ViewModel
     var listData : MutableLiveData<MutableList<ListItem>> = MutableLiveData()
     private var wholeDataList: MutableList<Data> = mutableListOf<Data>()
     var listitems:MutableList<ListItem> = mutableListOf<ListItem>()
-    val accesskey="d7883a55be191f4c15ba6f1dd5fc7a83"
+    val accesskey="74f084ded0e0712bc749b9811c33b392"
     val symbols="USD,JPY,GBP,AUD,CAD,PLN,MXN,RUB"
     var date_for_download: Calendar =Calendar.getInstance()
 
 
     fun get_actual_date_for_download(): String {
         val date = date_for_download.time
+
         return date.toString("yyyy-MM-dd")
     }
 
@@ -37,6 +40,7 @@ class MainViewModel : ViewModel() {
 
     fun get_symbols():String{
         return symbols
+
     }
 
 
@@ -46,88 +50,45 @@ class MainViewModel : ViewModel() {
         val retroInstance= RetroInstance.getRetroInstance().create(RetroService::class.java)
         retroInstance.getDataFromAPI(date,key,symbols).subscribeOn(Schedulers.io())
             .subscribe(
-                { responsebody ->
+                { responsebody->
                     if (responsebody != null) {
                         Log.i("pis", "POBIERAM")
-
+                    if(responsebody.success==true) {
 
 
                         wholeDataList.add(responsebody)
-                        var header= ListItem.HeaderItem(responsebody.date)
+                        var header = ListItem.HeaderItem(responsebody.date)
                         listitems.add(header)
-                        var rate= ListItem.RatesItem("USD",responsebody.rates.USD)
+                        var rate = ListItem.RatesItem("USD", responsebody.rates.USD,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("AUD",responsebody.rates.AUD)
+                        rate = ListItem.RatesItem("AUD", responsebody.rates.AUD,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("CAD",responsebody.rates.CAD)
+                        rate = ListItem.RatesItem("CAD", responsebody.rates.CAD,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("GBP",responsebody.rates.GBP)
+                        rate = ListItem.RatesItem("GBP", responsebody.rates.GBP,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("JPY",responsebody.rates.JPY)
+                        rate = ListItem.RatesItem("JPY", responsebody.rates.JPY,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("MXN",responsebody.rates.MXN)
+                        rate = ListItem.RatesItem("MXN", responsebody.rates.MXN,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("PLN",responsebody.rates.PLN)
+                        rate = ListItem.RatesItem("PLN", responsebody.rates.PLN,get_actual_date_for_download())
                         listitems.add(rate)
-                        rate= ListItem.RatesItem("RUB",responsebody.rates.RUB)
+                        rate = ListItem.RatesItem("RUB", responsebody.rates.RUB,get_actual_date_for_download())
                         listitems.add(rate)
-                        listData.postValue(listitems)
-                        date_for_download.add(Calendar.DATE,-1)
-                    }
 
+                    }
+                        else{
+                        Log.i("pis", "Error in downloading data")
+                        }
+
+                    }
                 },
-                { error ->  Log.i("pis", "Error: + $error") },
-                {
-
-                    Log.i("pis", "COMPLETE") })
-
-
-     /*   call.enqueue(object : Callback<Data> {
-            override fun onFailure(call: Call<Data>, t: Throwable) {
-                listData.postValue(null)
-                Log.i("pis", "ERROR: $t")
-            }
-
-            override fun onResponse(call: Call<Data>, response: Response<Data>) {
-                if(response.isSuccessful){
-                    val responsebody=response.body()
-                    if (responsebody != null) {
-                        Log.i("pis", "POBIERAM")
+                { error ->  Log.i("pis", "Error: + $error") }
+                )
+        date_for_download.add(Calendar.DATE,-1)
+        listData.value=listitems
 
 
-
-                            wholeDataList.add(responsebody)
-                            var header= ListItem.HeaderItem(responsebody.date)
-                            listitems.add(header)
-                            var rate= ListItem.RatesItem("USD",responsebody.rates.USD)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("AUD",responsebody.rates.AUD)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("CAD",responsebody.rates.CAD)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("GBP",responsebody.rates.GBP)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("JPY",responsebody.rates.JPY)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("MXN",responsebody.rates.MXN)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("PLN",responsebody.rates.PLN)
-                            listitems.add(rate)
-                            rate= ListItem.RatesItem("RUB",responsebody.rates.RUB)
-                            listitems.add(rate)
-                            listData.value=listitems
-
-                        date_for_download.add(Calendar.DATE,-1)
-                    }
-
-                }
-                else{
-                    listData.postValue(null)
-                }
-            }
-
-
-        })*/
 
     }
 

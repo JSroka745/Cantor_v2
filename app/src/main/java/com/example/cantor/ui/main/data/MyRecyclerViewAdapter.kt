@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>, val itemClickHandler: (ListItem.RatesItem) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -19,6 +19,9 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>) : Recy
         }
         else{
              view = LayoutInflater.from(parent.context).inflate(com.example.cantor.R.layout.card_view, parent, false)
+            view.setOnClickListener(View.OnClickListener {
+
+            })
             return Rateviewholder(view)
         }
     }
@@ -54,9 +57,36 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>) : Recy
         }
         else if(holder is Rateviewholder){
             var rateitem: ListItem.RatesItem= dataList[position] as ListItem.RatesItem
+            holder.itemView.setOnClickListener { itemClickHandler(rateitem) }
 
+            if(rateitem.name=="GBP")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"£"
+            }
+
+            else if(rateitem.name=="USD" || rateitem.name=="MXN" || rateitem.name=="AUD" || rateitem.name=="CAD")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"$"
+            }
+
+            else if(rateitem.name=="JPY")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"¥"
+            }
+
+
+            else if(rateitem.name=="PLN")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"zł"
+            }
+
+            else if(rateitem.name=="RUB")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"₽"
+            }
             holder.tv_name.text=rateitem.name
-            holder.tv_value.text= rateitem.value.toString()
+
+
         }
 
     }

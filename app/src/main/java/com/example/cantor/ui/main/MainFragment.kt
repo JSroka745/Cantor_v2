@@ -15,8 +15,7 @@ import com.example.cantor.R
 import com.example.cantor.databinding.MainFragmentBinding
 import com.example.cantor.ui.main.data.MyRecyclerViewAdapter
 import android.widget.Toast
-
-
+import com.example.cantor.ui.main.data.ListItem
 
 
 class MainFragment : Fragment() {
@@ -41,25 +40,27 @@ class MainFragment : Fragment() {
 
 
         binding.lifecycleOwner = viewLifecycleOwner
-       // "http://data.fixer.io/api/2021-10-29?access_key=d7883a55be191f4c15ba6f1dd5fc7a83&symbols=USD,JPY,GBP,AUD,CAD,PLN,MXN,RUB"
 
-        viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
+
+
         recyclerView=binding.mainfragmentRecyclerView
 
 
         viewModel.listData.observe(viewLifecycleOwner, Observer {
-            myadapter= MyRecyclerViewAdapter(it)
+            myadapter= MyRecyclerViewAdapter(it,this@MainFragment::onItemClickHandler)
             recyclerView!!.adapter=myadapter
             recyclerView!!.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
 
             myadapter.notifyDataSetChanged()
         })
 
+
+
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(context, "Last", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(context, "Last", Toast.LENGTH_LONG).show()
                     viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
 
                 }
@@ -71,8 +72,26 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
         // TODO: Use the ViewModel
+    }
+
+    private fun onItemClickHandler(item:ListItem.RatesItem){
+
+        var name = item.name
+        var rate=item.value
+        var date = item.date
+        var bundle = Bundle()
+        bundle.putString("name", name)
+        bundle.putString("date", date)
+        bundle.putString("rate", rate.toString())
+        val frag = InfoFragment.newInstance()
+        this.viewModelStore.clear()
+        frag.arguments = bundle
+        val transaction = requireActivity().supportFragmentManager.beginTransaction().addToBackStack("first")
+        transaction.replace((((view?.parent)) as ViewGroup).id, frag)
+        transaction.commit()
+
     }
 
 }

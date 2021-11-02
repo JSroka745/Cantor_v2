@@ -18,7 +18,7 @@ abstract class ListItem {
         }
     }
 
-    data class RatesItem(var name:String,var value:Double): ListItem() {
+    data class RatesItem(var name:String,var value:Double, var date:String): ListItem() {
 
 
 
