@@ -1,21 +1,19 @@
 package com.example.cantor.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cantor.R
 import com.example.cantor.databinding.MainFragmentBinding
-import com.example.cantor.ui.main.data.MyRecyclerViewAdapter
-import android.widget.Toast
 import com.example.cantor.ui.main.data.ListItem
+import com.example.cantor.ui.main.data.MyRecyclerViewAdapter
 
 
 class MainFragment : Fragment() {
@@ -53,32 +51,22 @@ class MainFragment : Fragment() {
 
 
         }
-       /* viewModel.listData.observe(viewLifecycleOwner, Observer {
-            myadapter= MyRecyclerViewAdapter(it,this@MainFragment::onItemClickHandler)
-            Log.i("pis", "ZAOBSERWOWALEM")
-            recyclerView!!.adapter=myadapter
-            recyclerView!!.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
 
-
-        })*/
 
         viewModel.listData.observe(viewLifecycleOwner, Observer {
             setDrawables(it)
-            Log.i("pis", "ZAOBSERWOWALEM")
             if(data_to_show.size>0){
                 if(!data_to_show.contains(it[0]))
                 {
                     data_to_show.addAll(it)
                     myadapter.notifyDataSetChanged()
                     blocked=false
-                    Log.i("pis", "ZAOBSERWOWALEM tutaj data:"+data_to_show.toString())
                 }
             }
             else{
                 data_to_show.addAll(it)
                 myadapter.notifyDataSetChanged()
                 blocked=false
-                Log.i("pis", "ZAOBSERWOWALEM tutaj data:"+data_to_show.toString())
             }
 
         })
@@ -91,8 +79,6 @@ class MainFragment : Fragment() {
                 if (!recyclerView.canScrollVertically(1)) {
                     if(blocked==false)
                     {
-                        Log.i("pis", "SCROLL")
-                        //Toast.makeText(context, "Last", Toast.LENGTH_LONG).show()
                         viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
                         blocked=true
                     }

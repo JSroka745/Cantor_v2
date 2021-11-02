@@ -1,28 +1,16 @@
 package com.example.cantor.ui.main
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.cantor.ui.main.data.Data
 import com.example.cantor.ui.main.data.ListItem
 import com.example.cantor.ui.main.data.RetroInstance
 import com.example.cantor.ui.main.data.RetroService
-import io.reactivex.Observer
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.coroutineContext
 
 class MainViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
     var listData : MutableLiveData<MutableList<ListItem>> = MutableLiveData()
 
     val accesskey="780c7f66d5aec984c54a81e863831b32"
@@ -66,11 +54,9 @@ class MainViewModel : ViewModel() {
             .subscribe(
                 { responsebody->
                     if (responsebody != null) {
-                        Log.i("pis", "POBIERAM")
                     if(responsebody.success==true) {
 
                         var listitems:MutableList<ListItem> = mutableListOf<ListItem>()
-
                         var header = ListItem.HeaderItem(responsebody.date)
                         listitems.add(header)
                         var rate = ListItem.RatesItem("USD", responsebody.rates.USD,date)
@@ -90,18 +76,16 @@ class MainViewModel : ViewModel() {
                         rate = ListItem.RatesItem("RUB", responsebody.rates.RUB,date)
                         listitems.add(rate)
                         listData.postValue(listitems)
-                        Log.i("pis", "Changing listDATA to: "+listData.value.toString())
                         date_for_download.add(Calendar.DATE,-1)
-                        Log.i("pis", "Changing date to: "+date_for_download.time.toString())
 
                     }
                         else{
-                        Log.i("pis", "Error in downloading data")
+                        Log.i("test", "API USAGE 100%")
                         }
 
                     }
                 },
-                { error ->  Log.i("pis", "Error: + $error") }
+                { error ->  Log.i("test", "Error: + $error") }
                 )
 
 
@@ -117,9 +101,7 @@ class MainViewModel : ViewModel() {
             .subscribe(
                 { responsebody->
                     if (responsebody != null) {
-                        Log.i("pis", "POBIERAM")
                         if(responsebody.success==true) {
-
 
 
                             var header = ListItem.HeaderItem(responsebody.date)
@@ -146,12 +128,12 @@ class MainViewModel : ViewModel() {
 
                         }
                         else{
-                            Log.i("pis", "Error in downloading data")
+                            Log.i("test", "API USAGE 100%")
                         }
 
                     }
                 },
-                { error ->  Log.i("pis", "Error: + $error") },
+                { error ->  Log.i("test", "Error: + $error") },
 
             )
 
@@ -159,10 +141,7 @@ class MainViewModel : ViewModel() {
             .subscribe(
                 { responsebody->
                     if (responsebody != null) {
-                        Log.i("pis", "POBIERAM")
                         if(responsebody.success==true) {
-
-
 
                             var header = ListItem.HeaderItem(responsebody.date)
                             listitems2.add(header)
@@ -182,23 +161,18 @@ class MainViewModel : ViewModel() {
                             listitems2.add(rate)
                             rate = ListItem.RatesItem("RUB", responsebody.rates.RUB,date[1])
                             listitems2.add(rate)
-                            //listData.postValue(listitems)
-
-
-
 
                         }
                         else{
-                            Log.i("pis", "Error in downloading data")
+                            Log.i("test", "API USAGE 100%")
                         }
 
                     }
                 },
-                { error ->  Log.i("pis", "Error: + $error") },
+                { error ->  Log.i("test", "Error: + $error") },
                 {
                     listitems.addAll(listitems2)
                     listData.postValue(listitems)
-                    Log.i("pis", "COMPLETE----Changing listDATA to: "+listData.value.toString())
                 }
             )
 
