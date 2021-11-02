@@ -3,6 +3,7 @@ package com.example.cantor.ui.main.data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -38,6 +39,7 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>, val it
     class Rateviewholder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         var tv_name: TextView = itemView.findViewById(com.example.cantor.R.id.tv_rates_title)
         var tv_value: TextView = itemView.findViewById(com.example.cantor.R.id.tv_rates_desc)
+        var iv_flag:ImageView=itemView.findViewById(com.example.cantor.R.id.imageView3)
 
     }
 
@@ -62,11 +64,13 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>, val it
             if(rateitem.name=="GBP")
             {
                 holder.tv_value.text= rateitem.value.toString()+"£"
+
             }
 
             else if(rateitem.name=="USD" || rateitem.name=="MXN" || rateitem.name=="AUD" || rateitem.name=="CAD")
             {
                 holder.tv_value.text= rateitem.value.toString()+"$"
+
             }
 
             else if(rateitem.name=="JPY")
@@ -85,6 +89,7 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>, val it
                 holder.tv_value.text= rateitem.value.toString()+"₽"
             }
             holder.tv_name.text=rateitem.name
+            holder.iv_flag.setImageDrawable(rateitem.drawable)
 
 
         }

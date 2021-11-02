@@ -32,9 +32,56 @@ class InfoFragment : Fragment() {
         binding.infoviewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.tvDateFrinfo.text=date
+        if(name=="USD")
+        {
 
-        binding.tvRateFrinfo.text="1 EUR = "+rate+name
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.usd,null))
+
+        }
+
+        else if(name=="AUD")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.aud,null))
+        }
+
+        else if(name=="CAD")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.cad,null))
+        }
+
+        else if(name=="GBP")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.gbp,null))
+        }
+
+        else if(name=="JPY")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.jpy,null))
+        }
+
+        else if(name=="MXN")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.mxn,null))
+        }
+
+        else if(name=="PLN")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.pln,null))
+        }
+
+        else if(name=="RUB")
+        {
+
+            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.rub,null))
+        }
+        binding.tvDateFrinfo.text=date
+        binding.tvRateFrinfo.text="1 EUR = "+rate+" "+name
 
         val drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.gradient_info)
 

@@ -23,35 +23,64 @@ class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var myadapter: MyRecyclerViewAdapter
+    private var data_to_show:MutableList<ListItem> = mutableListOf<ListItem>()
+    private var blocked:Boolean=false
+    private var recyclerView:RecyclerView?=null
     companion object {
         fun newInstance() = MainFragment()
     }
 
 
-    private var recyclerView:RecyclerView?=null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
 
 
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         binding.viewModel = viewModel
-
-
         binding.lifecycleOwner = viewLifecycleOwner
-
-
-
         recyclerView=binding.mainfragmentRecyclerView
 
+        myadapter= MyRecyclerViewAdapter(data_to_show,this@MainFragment::onItemClickHandler)
+        recyclerView!!.adapter=myadapter
+        recyclerView!!.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
+        if(data_to_show.size<1)
+        {
 
-        viewModel.listData.observe(viewLifecycleOwner, Observer {
+                viewModel.makeFirstAPICall(viewModel.get_two_dates_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
+
+
+        }
+       /* viewModel.listData.observe(viewLifecycleOwner, Observer {
             myadapter= MyRecyclerViewAdapter(it,this@MainFragment::onItemClickHandler)
+            Log.i("pis", "ZAOBSERWOWALEM")
             recyclerView!!.adapter=myadapter
             recyclerView!!.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
 
-            myadapter.notifyDataSetChanged()
+
+        })*/
+
+        viewModel.listData.observe(viewLifecycleOwner, Observer {
+            setDrawables(it)
+            Log.i("pis", "ZAOBSERWOWALEM")
+            if(data_to_show.size>0){
+                if(!data_to_show.contains(it[0]))
+                {
+                    data_to_show.addAll(it)
+                    myadapter.notifyDataSetChanged()
+                    blocked=false
+                    Log.i("pis", "ZAOBSERWOWALEM tutaj data:"+data_to_show.toString())
+                }
+            }
+            else{
+                data_to_show.addAll(it)
+                myadapter.notifyDataSetChanged()
+                blocked=false
+                Log.i("pis", "ZAOBSERWOWALEM tutaj data:"+data_to_show.toString())
+            }
+
         })
 
 
@@ -60,20 +89,21 @@ class MainFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    //Toast.makeText(context, "Last", Toast.LENGTH_LONG).show()
-                    viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
+                    if(blocked==false)
+                    {
+                        Log.i("pis", "SCROLL")
+                        //Toast.makeText(context, "Last", Toast.LENGTH_LONG).show()
+                        viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
+                        blocked=true
+                    }
+
+
 
                 }
             }
         })
 
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
-        // TODO: Use the ViewModel
     }
 
     private fun onItemClickHandler(item:ListItem.RatesItem){
@@ -92,6 +122,65 @@ class MainFragment : Fragment() {
         transaction.replace((((view?.parent)) as ViewGroup).id, frag)
         transaction.commit()
 
+    }
+
+    private fun setDrawables(list:MutableList<ListItem>){
+        for(item in list)
+        {
+            if(item.type()==1)
+            {
+                var rateitem=item as ListItem.RatesItem
+                if(rateitem.name=="USD")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.usd,null)
+                }
+
+                else if(rateitem.name=="AUD")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.aud,null)
+                }
+
+                else if(rateitem.name=="CAD")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.cad,null)
+                }
+
+                else if(rateitem.name=="GBP")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.gbp,null)
+                }
+
+                else if(rateitem.name=="JPY")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.jpy,null)
+                }
+
+                else if(rateitem.name=="MXN")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.mxn,null)
+                }
+
+                else if(rateitem.name=="PLN")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.pln,null)
+                }
+
+                else if(rateitem.name=="RUB")
+                {
+
+                    rateitem.drawable=resources.getDrawable(R.drawable.rub,null)
+                }
+
+
+            }
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.cantor.ui.main.data
 
+import android.graphics.drawable.Drawable
+
 abstract class ListItem {
     abstract fun type(): Int
 
@@ -20,7 +22,7 @@ abstract class ListItem {
 
     data class RatesItem(var name:String,var value:Double, var date:String): ListItem() {
 
-
+        lateinit var drawable: Drawable
 
         override fun type(): Int {
             return TYPE_RATE
