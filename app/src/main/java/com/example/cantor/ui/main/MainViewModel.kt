@@ -26,7 +26,7 @@ class MainViewModel : ViewModel() {
 
     fun get_two_dates_for_download():MutableList<String>{
         var mydate = date_for_download.time
-        var tab= mutableListOf<String>()
+        val tab= mutableListOf<String>()
         tab.add(mydate.toString("yyyy-MM-dd"))
         date_for_download.add(Calendar.DATE,-1)
         mydate=date_for_download.time

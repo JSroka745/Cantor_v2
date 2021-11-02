@@ -21,11 +21,11 @@ class InfoFragment : Fragment() {
     private lateinit var viewModel: InfoViewModel
     private lateinit var binding : InfoFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        var name= arguments?.getString("name")
-        var date= arguments?.getString("date")
-        var rate= arguments?.getString("rate")
+        val name= arguments?.getString("name")
+        val date= arguments?.getString("date")
+        val rate= arguments?.getString("rate")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.info_fragment, container, false)
         viewModel = ViewModelProvider(this).get(InfoViewModel::class.java)

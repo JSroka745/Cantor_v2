@@ -94,10 +94,10 @@ class MainFragment : Fragment() {
 
     private fun onItemClickHandler(item:ListItem.RatesItem){
 
-        var name = item.name
-        var rate=item.value
-        var date = item.date
-        var bundle = Bundle()
+        val name = item.name
+        val rate=item.value
+        val date = item.date
+        val bundle = Bundle()
         bundle.putString("name", name)
         bundle.putString("date", date)
         bundle.putString("rate", rate.toString())
@@ -115,7 +115,7 @@ class MainFragment : Fragment() {
         {
             if(item.type()==1)
             {
-                var rateitem=item as ListItem.RatesItem
+                val rateitem=item as ListItem.RatesItem
                 if(rateitem.name=="USD")
                 {
 
