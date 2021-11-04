@@ -12,8 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cantor.R
 import com.example.cantor.databinding.MainFragmentBinding
-import com.example.cantor.ui.main.data.ListItem
-import com.example.cantor.ui.main.data.MyRecyclerViewAdapter
+import com.example.cantor.data.ListItem
+import com.example.cantor.data.MyRecyclerViewAdapter
+import android.content.Context
+import android.content.res.Resources
+import android.util.Log
+import com.example.cantor.viewmodels.MainViewModel
 
 
 class MainFragment : Fragment() {
@@ -22,7 +26,6 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var myadapter: MyRecyclerViewAdapter
     private var data_to_show:MutableList<ListItem> = mutableListOf<ListItem>()
-    private var blocked:Boolean=false
     private var recyclerView:RecyclerView?=null
     companion object {
         fun newInstance() = MainFragment()
@@ -32,8 +35,6 @@ class MainFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
-
 
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
@@ -46,45 +47,35 @@ class MainFragment : Fragment() {
         recyclerView!!.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
         if(data_to_show.size<1)
         {
-
-                viewModel.makeFirstAPICall(viewModel.get_two_dates_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
-
-
+                viewModel.get_data()
         }
 
 
         viewModel.listData.observe(viewLifecycleOwner, Observer {
-            setDrawables(it)
-            if(data_to_show.size>0){
-                if(!data_to_show.contains(it[0]))
-                {
+            if(it!=null) {
+                setDrawables(it)
+                if (data_to_show.size > 0) {
+                    if (!data_to_show.contains(it[0])) {
+                        data_to_show.addAll(it)
+                        myadapter.notifyDataSetChanged()
+
+                    }
+                } else {
                     data_to_show.addAll(it)
                     myadapter.notifyDataSetChanged()
-                    blocked=false
+
                 }
-            }
-            else{
-                data_to_show.addAll(it)
-                myadapter.notifyDataSetChanged()
-                blocked=false
+
             }
 
         })
-
 
 
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    if(blocked==false)
-                    {
-                        viewModel.makeAPICall(viewModel.get_actual_date_for_download(),viewModel.get_access_key(),viewModel.get_symbols())
-                        blocked=true
-                    }
-
-
-
+                    viewModel.get_data()
                 }
             }
         })
@@ -111,62 +102,22 @@ class MainFragment : Fragment() {
     }
 
     private fun setDrawables(list:MutableList<ListItem>){
-        for(item in list)
-        {
-            if(item.type()==1)
-            {
-                val rateitem=item as ListItem.RatesItem
-                if(rateitem.name=="USD")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.usd,null)
+            for (item in list) {
+                Log.i("test","ustawiam drawable")
+                if (item.type() == 1) {
+                    val rateitem = item as ListItem.RatesItem
+                    val drawableResId =
+                        requireContext().resIdByName(rateitem.name.lowercase(), "drawable")
+                    rateitem.drawable = resources.getDrawable(drawableResId, null)
                 }
-
-                else if(rateitem.name=="AUD")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.aud,null)
-                }
-
-                else if(rateitem.name=="CAD")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.cad,null)
-                }
-
-                else if(rateitem.name=="GBP")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.gbp,null)
-                }
-
-                else if(rateitem.name=="JPY")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.jpy,null)
-                }
-
-                else if(rateitem.name=="MXN")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.mxn,null)
-                }
-
-                else if(rateitem.name=="PLN")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.pln,null)
-                }
-
-                else if(rateitem.name=="RUB")
-                {
-
-                    rateitem.drawable=resources.getDrawable(R.drawable.rub,null)
-                }
-
-
             }
+    }
+
+    fun Context.resIdByName(resIdName: String?, resType: String): Int {
+        resIdName?.let {
+            return resources.getIdentifier(it, resType, packageName)
         }
+        throw Resources.NotFoundException()
     }
 
 }

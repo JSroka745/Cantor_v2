@@ -1,4 +1,4 @@
-package com.example.cantor.ui.main.data
+package com.example.cantor.data
 
 import android.view.LayoutInflater
 import android.view.View
@@ -78,7 +78,6 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>, val it
                 holder.tv_value.text= rateitem.value.toString()+"¥"
             }
 
-
             else if(rateitem.name=="PLN")
             {
                 holder.tv_value.text= rateitem.value.toString()+"zł"
@@ -88,6 +87,17 @@ class MyRecyclerViewAdapter( private var dataList: MutableList<ListItem>, val it
             {
                 holder.tv_value.text= rateitem.value.toString()+"₽"
             }
+
+            else if(rateitem.name=="CHF")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"CHF"
+            }
+
+            else if(rateitem.name=="KRW")
+            {
+                holder.tv_value.text= rateitem.value.toString()+"₩"
+            }
+
             holder.tv_name.text=rateitem.name
             holder.iv_flag.setImageDrawable(rateitem.drawable)
 

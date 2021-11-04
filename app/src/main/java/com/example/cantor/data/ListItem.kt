@@ -1,4 +1,4 @@
-package com.example.cantor.ui.main.data
+package com.example.cantor.data
 
 import android.graphics.drawable.Drawable
 

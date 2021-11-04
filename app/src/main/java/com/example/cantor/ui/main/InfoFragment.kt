@@ -1,5 +1,7 @@
 package com.example.cantor.ui.main
 
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.AnimationDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.example.cantor.R
 import com.example.cantor.databinding.InfoFragmentBinding
+import com.example.cantor.viewmodels.InfoViewModel
 
 class InfoFragment : Fragment() {
 
@@ -31,61 +34,14 @@ class InfoFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(InfoViewModel::class.java)
         binding.infoviewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        val drawableResId = requireContext().resIdByName(name?.lowercase(), "drawable")
 
-        if(name=="USD")
-        {
 
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.usd,null))
-
-        }
-
-        else if(name=="AUD")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.aud,null))
-        }
-
-        else if(name=="CAD")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.cad,null))
-        }
-
-        else if(name=="GBP")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.gbp,null))
-        }
-
-        else if(name=="JPY")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.jpy,null))
-        }
-
-        else if(name=="MXN")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.mxn,null))
-        }
-
-        else if(name=="PLN")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.pln,null))
-        }
-
-        else if(name=="RUB")
-        {
-
-            binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.rub,null))
-        }
+        binding.imageView.setImageDrawable(resources.getDrawable(drawableResId,null))
         binding.tvDateFrinfo.text=date
         binding.tvRateFrinfo.text="1 EUR = "+rate+" "+name
 
         val drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.gradient_info)
-
-
         binding.constraintLayout.background=drawable
         val animationDrawable =  binding.constraintLayout.background as AnimationDrawable
         animationDrawable.setEnterFadeDuration(2000)
@@ -100,4 +56,10 @@ class InfoFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(InfoViewModel::class.java)
     }
 
+    fun Context.resIdByName(resIdName: String?, resType: String): Int {
+        resIdName?.let {
+            return resources.getIdentifier(it, resType, packageName)
+        }
+        throw Resources.NotFoundException()
+    }
 }

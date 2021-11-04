@@ -6,7 +6,7 @@
     <data>
         <variable
             name="infoviewModel"
-            type="com.example.cantor.ui.main.InfoViewModel" />
+            type="com.example.cantor.viewmodels.InfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

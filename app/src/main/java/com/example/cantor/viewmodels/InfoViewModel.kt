@@ -1,4 +1,4 @@
-package com.example.cantor.ui.main
+package com.example.cantor.viewmodels
 
 import androidx.lifecycle.ViewModel
 
