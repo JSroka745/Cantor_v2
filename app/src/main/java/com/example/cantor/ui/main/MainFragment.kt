@@ -58,16 +58,12 @@ class MainFragment : Fragment() {
                     if (!data_to_show.contains(it[0])) {
                         data_to_show.addAll(it)
                         myadapter.notifyDataSetChanged()
-
                     }
                 } else {
                     data_to_show.addAll(it)
                     myadapter.notifyDataSetChanged()
-
                 }
-
             }
-
         })
 
 

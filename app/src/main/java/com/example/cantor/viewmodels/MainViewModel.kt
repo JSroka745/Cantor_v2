@@ -22,8 +22,6 @@ class MainViewModel : ViewModel() {
 
 
 
-
-
     fun get_data(){
 
 

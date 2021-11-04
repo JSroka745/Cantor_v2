@@ -39,7 +39,6 @@ class Repository {
     }
 
 
-
     fun makeAPICall():MutableLiveData<MutableList<ListItem>>{
         val retroInstance= RetroInstance.getRetroInstance().create(RetroService::class.java)
         var compositeDisposable = CompositeDisposable()
@@ -77,13 +76,10 @@ class Repository {
                             listData.postValue(listitems)
                             date_for_download.add(Calendar.DATE,-1)
 
-
-
                         }
                         else{
                             Log.i("test", "API USAGE 100%")
                         }
-
                     }
                 },
                 { error ->  Log.i("test", "Error: + $error") },
